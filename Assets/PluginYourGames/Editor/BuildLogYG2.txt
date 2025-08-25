@@ -1,0 +1,3 @@
+Build path: C:/Users/gulnu/Downloads/Новая папка/ap.apk
+Build number: 10
+PluginYG version: 2.0042
