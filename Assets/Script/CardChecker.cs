@@ -7,10 +7,7 @@ public class CardChecker : MonoBehaviour
     public Hand hand;
     public List<Card> comboCards;
     public List<Card> otherCards;
-    private void Start()
-    {
-        hand = GameObject.FindGameObjectWithTag("Hand").GetComponent<Hand>();
-    }
+
     public void CheckCombination()
     {
         comboCards = new List<Card>();
@@ -25,26 +22,31 @@ public class CardChecker : MonoBehaviour
         selected = selected.OrderBy(c => (int)c.rank).ToList();
         var rankGroups = selected.GroupBy(c => c.rank).OrderByDescending(g => g.Count());
         var suitGroups = selected.GroupBy(c => c.suit).OrderByDescending(g => g.Count());
-        if (IsRoyalFlush(selected)) { PrintResult("Royal Flush", 5000); return; }
-        if (IsStraightFlush(selected)) { PrintResult("Straight Flush", 400); return; }
-        if (IsFourOfKind(rankGroups)) { PrintResult("Four of a Kind", 300); return; }
-        if (IsFullHouse(rankGroups)) { PrintResult("Full House", 220); return; }
-        if (IsFlush(suitGroups)) { PrintResult("Flush", 110); return; }
-        if (IsStraight(selected)) { PrintResult("Straight", 60); return; }
-        if (IsThreeOfKind(rankGroups)) { PrintResult("Three of a Kind", 40); return; }
-        if (IsTwoPair(rankGroups)) { PrintResult("Two Pair", 30); return; }
-        if (IsOnePair(rankGroups)) { PrintResult("One Pair", 20); return; }
+        if (IsRoyalFlush(selected)) { PrintResult("Royal Flush", 5000,5); return; }
+        if (IsStraightFlush(selected)) { PrintResult("Straight Flush", 400,5); return; }
+        if (IsFourOfKind(rankGroups)) { PrintResult("Four of a Kind", 300,4); return; }
+        if (IsFullHouse(rankGroups)) { PrintResult("Full House", 220,5); return; }
+        if (IsFlush(suitGroups)) { PrintResult("Flush", 110,5); return; }
+        if (IsStraight(selected)) { PrintResult("Straight", 60,5); return; }
+        if (IsThreeOfKind(rankGroups)) { PrintResult("Three of a Kind", 40,3); return; }
+        if (IsTwoPair(rankGroups)) { PrintResult("Two Pair", 30,4); return; }
+        if (IsOnePair(rankGroups)) { PrintResult("One Pair", 20,2); return; }
         Card high = selected.Last();
         comboCards.Add(high);
         otherCards = selected.Except(comboCards).ToList();
         int dmg = (int)high.rank <= 9 ? (int)high.rank : 10;
-        PrintResult("High Card", dmg);
+        PrintResult("High Card", dmg,1);
     }
+    [HideInInspector]
+    public int damage;
     public System.Action onResult;
-    private void PrintResult(string comboName, int damage)
+    [HideInInspector]
+    public int cards;
+    private void PrintResult(string comboName, int damage,int cards)
     {
         Debug.Log("Комбинация: " + comboName + " | Damage: " + damage);
-
+        this.cards = cards;
+        this.damage = damage;
         string combo = string.Join(", ", comboCards.Select(c => $"{c.rank} {c.suit}"));
         string other = string.Join(", ", otherCards.Select(c => $"{c.rank} {c.suit}"));
         onResult?.Invoke();

@@ -34,6 +34,35 @@ public class NodeButton : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!interactable ) return;
+        switch (type)
+        {
+            case MapGenerator.NodeType.Bar:
+                int i =(int)map.you.sl.maxValue - map.you.hp;
+                map.you.TakeHeal(i);
+                break;
+            case MapGenerator.NodeType.Monster:
+                map.enemy.Norm();
+                map.gameObject.SetActive(false);
+                break;
+            case MapGenerator.NodeType.SuperMonster:
+                map.enemy.NeNorm();
+                map.gameObject.SetActive(false);
+                break;
+            case MapGenerator.NodeType.Shop:
+                map.shop.SetActive(true);
+                map.gameObject.SetActive(false);
+                break;
+            case MapGenerator.NodeType.Chest:
+                map.rules.coins += 15;
+                map.sm.AddRandomSpell();
+                break;
+            case MapGenerator.NodeType.Boss:
+                map.enemy.Boss();
+                map.gameObject.SetActive(false);
+                break;
+            default:
+                break;
+        }
         map.SelectNode(row, col);
     }
 }

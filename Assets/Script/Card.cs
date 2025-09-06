@@ -36,12 +36,13 @@ public class Card : MonoBehaviour,IPointerClickHandler
         StartCoroutine(MoveTo(target, 0.25f));
         isUp = !isUp;
     }
-    private void OnDestroy()
+    private void OnDisable()
     {
         if (hand != null)
         {
             hand.cards.Remove(this);
             hand.cardsUp.Remove(this);
+            hand.graveyard.Add(this);
         }
     }
 

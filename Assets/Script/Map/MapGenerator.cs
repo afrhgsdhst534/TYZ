@@ -20,7 +20,18 @@ public class MapGenerator : MonoBehaviour
     private NodeButton currentNode;
     public float x;
     public float y;
-    public int extraVision = 1; void Start()
+    public Rules rules;
+    public You you;
+    public Enemy enemy;
+    public SpellManager sm;
+    public GameObject shop;
+    public int extraVision = 1;
+    private void OnDisable()
+    {
+        if (shop.activeInHierarchy) return;
+        rules.BattleStart();
+    }
+    void Start()
     {
         GenerateMap();
         MoveAllNodes(new Vector2(x, y));

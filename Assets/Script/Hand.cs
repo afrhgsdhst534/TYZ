@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
 public class Hand : MonoBehaviour
 {
     public List<Card> cards;
@@ -16,23 +15,20 @@ public class Hand : MonoBehaviour
     [Header("Спавн карты")]
     public float spawnPosX;          // Откуда карты прилетают
     public System.Action onAnimEnd;
-  public  EventSystem cur;
+    public CardPool pool;
+    public  EventSystem cur;
+    public List<Card> graveyard;
     private void Start()
     {
         cur = EventSystem.current;
     }
-    public void Add(Suit suit, Rank rank, Sprite sprite)
+    public void Add(Card card)
     {
-        Vector3 startPos = new Vector3(transform.position.x + spawnPosX, transform.position.y, transform.position.z);
-        Card card = Instantiate(this.card, startPos, Quaternion.identity, transform);
-        card.suit = suit;
-        card.sr.sprite = sprite;
-        card.rank = rank;
         AddCard(card);
     }
     public void AddCard(Card card)
     {
-        card.transform.SetParent(transform, false);
+        card.transform.SetParent(transform);
         card.transform.localRotation = Quaternion.identity;
         cards.Add(card);
         UpdateHandPositions();
@@ -40,7 +36,6 @@ public class Hand : MonoBehaviour
     private IEnumerator MoveCard(Transform card, Vector3 targetPos)
     {
         cur.enabled = false;
-
         Vector3 startPos = card.localPosition;
         float t = 0;
         while (t < 1)
@@ -49,10 +44,8 @@ public class Hand : MonoBehaviour
             card.localPosition = Vector3.Lerp(startPos, targetPos, t);
             yield return null;
         }
-
         onAnimEnd?.Invoke();
         cur.enabled = true;
-
     }
     public void UpdateHandPositions()
     {

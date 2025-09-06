@@ -7,6 +7,12 @@ TagManager:
   - SpriteAnchorManager
   - Hand
   - CardChecker
+  - SpellManager
+  - You
+  - BattleChecker
+  - Enemy
+  - Rules
+  - DealerMudak
   layers:
   - Default
   - TransparentFX

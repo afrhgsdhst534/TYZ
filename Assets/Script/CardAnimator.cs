@@ -32,7 +32,7 @@ public class CardAnimator : MonoBehaviour
         }
     }
 
-    public IEnumerator RainbowCoroutine(float duration)
+    public IEnumerator GreenCoroutine(float duration)
     {
         Color startColor = sr.color;
         Color endColor = Color.green;
